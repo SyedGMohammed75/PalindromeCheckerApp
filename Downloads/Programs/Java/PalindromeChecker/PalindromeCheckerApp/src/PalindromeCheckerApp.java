@@ -1,103 +1,72 @@
 import java.util.*;
 
-interface PalindromeStrategy {
-    boolean checkPalindrome(String input);
-}
-
-class StackStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean checkPalindrome(String input) {
-
-        String normalized = input.toLowerCase().replaceAll("\\s+", "");
-        Stack<Character> stack = new Stack<>();
-
-        for (char ch : normalized.toCharArray()) {
-            stack.push(ch);
-        }
-
-        for (char ch : normalized.toCharArray()) {
-            if (ch != stack.pop()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-class DequeStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean checkPalindrome(String input) {
-
-        String normalized = input.toLowerCase().replaceAll("\\s+", "");
-        Deque<Character> deque = new ArrayDeque<>();
-
-        for (char ch : normalized.toCharArray()) {
-            deque.addLast(ch);
-        }
-
-        while (deque.size() > 1) {
-            if (!deque.removeFirst().equals(deque.removeLast())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-
-class PalindromeContext {
-
-    private PalindromeStrategy strategy;
-
-    public PalindromeContext(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean executeStrategy(String input) {
-        return strategy.checkPalindrome(input);
-    }
-}
-
-
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Palindrome Checker App - UC12 (Strategy Pattern)");
-        System.out.println("Choose Algorithm:");
-        System.out.println("1. Stack Strategy");
-        System.out.println("2. Deque Strategy");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
+        System.out.println("Palindrome Checker App - UC13 (Performance Comparison)");
         System.out.println("Enter a string:");
+
         String input = scanner.nextLine();
+        String normalized = input.toLowerCase().replaceAll("\\s+", "");
 
-        PalindromeStrategy strategy;
+        long start1 = System.nanoTime();
+        boolean result1 = reverseStringMethod(normalized);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
 
-        if (choice == 1) {
-            strategy = new StackStrategy();
-        } else {
-            strategy = new DequeStrategy();
-        }
+        long start2 = System.nanoTime();
+        boolean result2 = stackMethod(normalized);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
 
-        PalindromeContext context = new PalindromeContext(strategy);
+        long start3 = System.nanoTime();
+        boolean result3 = twoPointerMethod(normalized);
+        long end3 = System.nanoTime();
+        long time3 = end3 - start3;
 
-        boolean result = context.executeStrategy(input);
-
-        if (result) {
-            System.out.println("Result: The string is a Palindrome.");
-        } else {
-            System.out.println("Result: The string is NOT a Palindrome.");
-        }
+        System.out.println("\nResults:");
+        System.out.println("Reverse String Method: " + result1 + " | Time: " + time1 + " ns");
+        System.out.println("Stack Method: " + result2 + " | Time: " + time2 + " ns");
+        System.out.println("Two Pointer Method: " + result3 + " | Time: " + time3 + " ns");
 
         scanner.close();
+    }
+
+    public static boolean reverseStringMethod(String str) {
+        String reversed = "";
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed = reversed + str.charAt(i);
+        }
+        return str.equals(reversed);
+    }
+
+    public static boolean stackMethod(String str) {
+        Stack<Character> stack = new Stack<>();
+        for (char ch : str.toCharArray()) {
+            stack.push(ch);
+        }
+        for (char ch : str.toCharArray()) {
+            if (ch != stack.pop()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean twoPointerMethod(String str) {
+        int start = 0;
+        int end = str.length() - 1;
+
+        while (start < end) {
+            if (str.charAt(start) != str.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
     }
 }
