@@ -6,19 +6,33 @@ public class PalindromeCheckerApp {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Palindrome Checker App - UC3");
+        System.out.println("Palindrome Checker App - UC4");
         System.out.println("Enter a string:");
 
-        String original = scanner.nextLine();
-        String reversed = "";
+        String input = scanner.nextLine();
 
 
-        for (int i = original.length() - 1; i >= 0; i--) {
-            reversed = reversed + original.charAt(i);
+        char[] characters = input.toCharArray();
+
+        int start = 0;
+        int end = characters.length - 1;
+
+        boolean isPalindrome = true;
+
+
+        while (start < end) {
+
+            if (characters[start] != characters[end]) {
+                isPalindrome = false;
+                break;
+            }
+
+            start++;
+            end--;
         }
 
 
-        if (original.equals(reversed)) {
+        if (isPalindrome) {
             System.out.println("Result: The string is a Palindrome.");
         } else {
             System.out.println("Result: The string is NOT a Palindrome.");
@@ -27,4 +41,3 @@ public class PalindromeCheckerApp {
         scanner.close();
     }
 }
-
