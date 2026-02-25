@@ -6,12 +6,14 @@ public class PalindromeCheckerApp {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Palindrome Checker App - UC9 (Recursive Based)");
+        System.out.println("Palindrome Checker App - UC10 (Case & Space Ignored)");
         System.out.println("Enter a string:");
 
         String input = scanner.nextLine();
 
-        boolean isPalindrome = checkPalindrome(input, 0, input.length() - 1);
+        String normalized = input.toLowerCase().replaceAll("\\s+", "");
+
+        boolean isPalindrome = checkPalindrome(normalized);
 
         if (isPalindrome) {
             System.out.println("Result: The string is a Palindrome.");
@@ -22,16 +24,22 @@ public class PalindromeCheckerApp {
         scanner.close();
     }
 
-    public static boolean checkPalindrome(String str, int start, int end) {
+    // Two-pointer logic
+    public static boolean checkPalindrome(String str) {
 
-        if (start >= end) {
-            return true;
+        int start = 0;
+        int end = str.length() - 1;
+
+        while (start < end) {
+
+            if (str.charAt(start) != str.charAt(end)) {
+                return false;
+            }
+
+            start++;
+            end--;
         }
 
-        if (str.charAt(start) != str.charAt(end)) {
-            return false;
-        }
-
-        return checkPalindrome(str, start + 1, end - 1);
+        return true;
     }
 }
