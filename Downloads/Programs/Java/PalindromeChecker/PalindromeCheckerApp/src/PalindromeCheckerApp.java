@@ -1,4 +1,31 @@
 import java.util.Scanner;
+import java.util.Stack;
+
+class PalindromeChecker {
+
+    public boolean checkPalindrome(String input) {
+
+        if (input == null) {
+            return false;
+        }
+
+        String normalized = input.toLowerCase().replaceAll("\\s+", "");
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < normalized.length(); i++) {
+            stack.push(normalized.charAt(i));
+        }
+
+        for (int i = 0; i < normalized.length(); i++) {
+            if (normalized.charAt(i) != stack.pop()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
 
 public class PalindromeCheckerApp {
 
@@ -6,40 +33,21 @@ public class PalindromeCheckerApp {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Palindrome Checker App - UC10 (Case & Space Ignored)");
+        System.out.println("Palindrome Checker App - UC11 (OOP Based)");
         System.out.println("Enter a string:");
 
         String input = scanner.nextLine();
 
-        String normalized = input.toLowerCase().replaceAll("\\s+", "");
+        PalindromeChecker checker = new PalindromeChecker();
 
-        boolean isPalindrome = checkPalindrome(normalized);
+        boolean result = checker.checkPalindrome(input);
 
-        if (isPalindrome) {
+        if (result) {
             System.out.println("Result: The string is a Palindrome.");
         } else {
             System.out.println("Result: The string is NOT a Palindrome.");
         }
 
         scanner.close();
-    }
-
-    // Two-pointer logic
-    public static boolean checkPalindrome(String str) {
-
-        int start = 0;
-        int end = str.length() - 1;
-
-        while (start < end) {
-
-            if (str.charAt(start) != str.charAt(end)) {
-                return false;
-            }
-
-            start++;
-            end--;
-        }
-
-        return true;
     }
 }
